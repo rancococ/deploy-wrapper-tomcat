@@ -11,6 +11,14 @@ services:
     container_name: "tomcat-${SERVICE_NAME}.${PRODUCT_NAME}.${COMPANY_NAME}"
     hostname: "tomcat-${SERVICE_NAME}.${PRODUCT_NAME}.${COMPANY_NAME}"
     restart: "always"
+    environment:
+      - TOMCAT_JMX_EXPORTER_ENABLED=true
+      - TOMCAT_JMX_EXPORTER_PORT=9404
+      - TOMCAT_PRINT_GC_ENABLED=true
+      - TOMCAT_XMS=4096M
+      - TOMCAT_XMX=4096M
+      - TOMCAT_HTTP_LISTEN_PORT=8080
+      - TOMCAT_OTHER_PARAMETERS=""
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./volume/tomcat/fonts:/usr/share/fonts/chinese:rw
