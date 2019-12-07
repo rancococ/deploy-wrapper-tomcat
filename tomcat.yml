@@ -1,0 +1,26 @@
+##########################################################################
+# 部署配置文件(base)
+# 本配置文件(xx.yml)中的变量(${xxx})是从同级目录下的.env文件中读取的
+##########################################################################
+# compose支持的版本2
+version: "2"
+services:
+  # tomcat
+  tomcat:
+    image: ${IMAGE_REPO}/${IMAGE_TOMCAT}
+    container_name: "tomcat-${SERVICE_NAME}.${PRODUCT_NAME}.${COMPANY_NAME}"
+    hostname: "tomcat-${SERVICE_NAME}.${PRODUCT_NAME}.${COMPANY_NAME}"
+    restart: "always"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./volume/tomcat/fonts:/usr/share/fonts/chinese:rw
+      - ./volume/tomcat/libextend:/data/app/libextend:ro
+      - ./volume/tomcat/data:/data/app/webapps/ROOT:ro
+      - ./volume/tomcat/logs:/data/app/logs:rw
+      - ./volume/tomcat/temp:/data/app/temp:rw
+    network_mode: "host"
+    extra_hosts:
+      - "tomcat-${SERVICE_NAME}.${PRODUCT_NAME}.${COMPANY_NAME}:${HOST_IP}"
+    # cap_add:
+    #   - NET_ADMIN
+    #   - SYS_ADMIN
