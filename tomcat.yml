@@ -11,17 +11,8 @@ services:
     container_name: "tomcat-web.${PRODUCT_NAME}.${COMPANY_NAME}"
     hostname: "tomcat-web.${PRODUCT_NAME}.${COMPANY_NAME}"
     restart: "always"
-    environment:
-      - JVM_JMX_EXPORTER_ENABLED=${JVM_JMX_EXPORTER_ENABLED}
-      - JVM_JMX_EXPORTER_PORT=${JVM_JMX_EXPORTER_PORT}
-      - JVM_XMS=${JVM_XMS}
-      - JVM_XMX=${JVM_XMX}
-      - JVM_XSS=${JVM_XSS}
-      - JVM_METASPACE_SIZE=${JVM_METASPACE_SIZE}
-      - JVM_MAX_METASPACE_SIZE=${JVM_MAX_METASPACE_SIZE}
-      - JVM_MAX_DIRECT_MEMORY_SIZE=${JVM_MAX_DIRECT_MEMORY_SIZE}
-      - JVM_HTTP_LISTEN_PORT=${JVM_HTTP_LISTEN_PORT}
-      - JVM_OTHER_PARAMETERS=${JVM_OTHER_PARAMETERS}
+    env_file:
+      - ./tomcat.env
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./volume/tomcat/fonts:/usr/share/fonts/chinese:rw
