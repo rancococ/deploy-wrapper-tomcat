@@ -69,11 +69,12 @@ cd "${base_dir}"
 # args flag
 #
 arg_help=
-arg_load=
 arg_init=
+arg_load=
+arg_images_package=
+arg_deploy=
+arg_deploy_package=
 arg_empty=true
-
-arg_package=
 
 #
 # parse parameter
@@ -89,7 +90,7 @@ arg_package=
 # $@ 从命令行取出参数列表(不能用用 $* 代替，因为 $* 将所有的参数解释成一个字符串
 #                         而 $@ 是一个参数数组)
 # args=`getopt -o ab:c:: -a -l apple,banana:,cherry:: -n "${source}" -- "$@"`
-args=`getopt -o h -a -l help,load:,init -n "${source}" -- "$@"`
+args=`getopt -o h -a -l help,init,load:,deploy: -n "${source}" -- "$@"`
 # 判定 getopt 的执行时候有错，错误信息输出到 STDERR
 if [ $? != 0 ]; then
     error "Terminating..." >&2
@@ -109,18 +110,25 @@ do
             arg_empty=false
             shift
             ;;
-        --load | -load)
-            info "option --load argument : $2"
-            arg_load=true
-            arg_empty=false
-            arg_package=$2
-            shift 2
-            ;;
         --init | -init)
             info "option --init"
             arg_init=true
             arg_empty=false
             shift
+            ;;
+        --load | -load)
+            info "option --load argument : $2"
+            arg_load=true
+            arg_empty=false
+            arg_images_package=$2
+            shift 2
+            ;;
+        --deploy | -deploy)
+            info "option --deploy argument : $2"
+            arg_deploy=true
+            arg_empty=false
+            arg_deploy_package=$2
+            shift 2
             ;;
         --)
             shift
@@ -139,24 +147,17 @@ for arg do
 done
 
 # show usage
-usage=$"`basename $0` [-h|--help] [--load=xxx.tgz] [--init]
+usage=$"`basename $0` [-h|--help] [--init] [--load=xxx.tgz] [--deploy=xxx.war]
        [-h|--help]
                        show help info.
-       [--load=xxx.tgz]
-                       load images.
        [--init]
                        init volume.
+       [--load=xxx.tgz]
+                       load images.
+       [--deploy=xxx.war]
+                       deploy war to datadir.
 "
 
-
-# load images
-fun_load_images() {
-    header "load images : "
-    info "load image : ${arg_package}"
-    docker load -i "${arg_package}";
-    success "successfully loaded ${arg_package}"
-    return 0
-}
 
 # init volume
 fun_init_volume() {
@@ -191,6 +192,32 @@ fun_init_volume() {
     return 0
 }
 
+# load images
+fun_load_images() {
+    header "load images : "
+    info "load image : ${arg_images_package}"
+    docker load -i "${arg_images_package}";
+    success "successfully loaded ${arg_images_package}"
+    return 0
+}
+
+# deploy war
+fun_deploy_war() {
+    header "deploy war : "
+    info "deploy war : ${arg_deploy_package}"
+    suffix="${arg_deploy_package##*.}"
+    if [ "x${suffix}" == "xwar" ]; then
+        \rm -rf "${base_dir}/volume/tomcat/data/"
+        mkdir -p "${base_dir}/volume/tomcat/data/"
+        chmod -R 777 "${base_dir}/volume/tomcat/data/"
+        unzip -q "${arg_deploy_package}" -d "${base_dir}/volume/tomcat/data/"
+        success "successfully deployed ${arg_deploy_package}"
+    else
+        error "unsupported file format : ${arg_deploy_package}"
+    fi
+    return 0
+}
+
 
 ##########################################################################
 
@@ -206,18 +233,27 @@ if [ "x${arg_help}" == "xtrue" ]; then
     exit 1
 fi
 
+# init volume
+if [ "x${arg_init}" == "xtrue" ]; then
+    fun_init_volume;
+fi
+
 # load images
 if [ "x${arg_load}" == "xtrue" ]; then
-    if [ ! -f ${arg_package} ]; then
+    if [ ! -f ${arg_images_package} ]; then
         usage "$usage";
         exit 1
     fi
     fun_load_images;
 fi
 
-# init volume
-if [ "x${arg_init}" == "xtrue" ]; then
-    fun_init_volume;
+# deploy war
+if [ "x${arg_deploy}" == "xtrue" ]; then
+    if [ ! -f ${arg_deploy_package} ]; then
+        usage "$usage";
+        exit 1
+    fi
+    fun_deploy_war;
 fi
 
 echo ""
