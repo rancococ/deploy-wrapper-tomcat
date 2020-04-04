@@ -11,16 +11,15 @@
 
 # set -x
 set -e
-set -o noglob
 
-##########################################################################
 # set author info
 date1=`date "+%Y-%m-%d %H:%M:%S"`
 date2=`date "+%Y%m%d%H%M%S"`
 author="yong.ran@cdjdgm.com"
 
-##########################################################################
-# set font and color 
+set -o noglob
+
+# font and color 
 bold=$(tput bold)
 underline=$(tput sgr 0 1)
 reset=$(tput sgr0)
@@ -31,12 +30,10 @@ yellow=$(tput setaf 3)
 blue=$(tput setaf 4)
 white=$(tput setaf 7)
 
-##########################################################################
 # header and logging
-header() { printf "\n${underline}${bold}${blue}► %s${reset}\n" "$@"; }
-header2() { printf "\n${underline}${bold}${blue}♦ %s${reset}\n" "$@"; }
+header() { printf "\n${underline}${bold}${blue}> %s${reset}\n" "$@"; }
+header2() { printf "\n${underline}${bold}${blue}>> %s${reset}\n" "$@"; }
 info() { printf "${white}➜ %s${reset}\n" "$@"; }
-info2() { printf "${red}➜ %s${reset}\n" "$@"; }
 warn() { printf "${yellow}➜ %s${reset}\n" "$@"; }
 error() { printf "${red}✖ %s${reset}\n" "$@"; }
 success() { printf "${green}✔ %s${reset}\n" "$@"; }
@@ -47,7 +44,6 @@ trap "error '******* Caught sigint signal. Stopping...*******'; exit 2" sigint
 
 set +o noglob
 
-##########################################################################
 # entry base dir
 pwd=`pwd`
 base_dir="${pwd}"
@@ -60,7 +56,6 @@ done
 base_dir="$( cd -P "$( dirname "$source" )" && pwd )"
 cd "${base_dir}"
 
-##########################################################################
 # envirionment
 if [ -r "${base_dir}/.env" ]; then
     while read line; do
@@ -78,7 +73,7 @@ else
     project_name=${PRODUCT_NAME}
 fi
 
-# init args flag
+# args flag
 arg_help=
 arg_setup=
 arg_start=
@@ -87,30 +82,26 @@ arg_down=
 arg_list=
 arg_empty=true
 
-##########################################################################
 # parse parameter
 # echo $@
-# 定义选项， -o 表示短选项 -a 表示支持长选项的简单模式(以 - 开头) -l 表示长选项 
-# a 后没有冒号，表示没有参数
-# b 后跟一个冒号，表示有一个必要参数
-# c 后跟两个冒号，表示有一个可选参数(可选参数必须紧贴选项)
-# -n 出错时的信息
-# -- 也是一个选项，比如 要创建一个名字为 -f 的目录，会使用 mkdir -- -f ,
-#    在这里用做表示最后一个选项(用以判定 while 的结束)
-# $@ 从命令行取出参数列表(不能用用 $* 代替，因为 $* 将所有的参数解释成一个字符串
-#                         而 $@ 是一个参数数组)
+# define options, -o : short options, -a : simple mode for long options (starts with -), -l : long options
+# no colon after, indicating no parameter
+# followed by a colon to indicate that there is a required parameter
+# followed by two colons to indicate that there is an optional parameter (the optional parameter must be next to the option)
+# -n information on error
+# -- it is also an option. for example, to create a directory named "-f", "mkdir -- -f" will be used
+# $@ take the parameter list from the command line
 # args=`getopt -o ab:c:: -a -l apple,banana:,cherry:: -n "${source}" -- "$@"`
 args=`getopt -o h -a -l help,setup,start,stop,down,list -n "${source}" -- "$@"`
-# 判定 getopt 的执行时候有错，错误信息输出到 STDERR
+# terminate the execution when there is an error in the execution of getopt
 if [ $? != 0 ]; then
-    error "Terminating..." >&2
+    error "terminating..." >&2
     exit 1
 fi
 # echo ${args}
-# 重新排列参数的顺序
-# 使用eval 的目的是为了防止参数中有shell命令，被错误的扩展。
+# reorder parameters(The purpose of using eval is to prevent the shell command in the parameter from being extended by mistake)
 eval set -- "${args}"
-# 处理具体的选项
+# handling specific options
 while true
 do
     case "$1" in
@@ -160,11 +151,13 @@ do
             ;;
     esac
 done
-#显示除选项外的参数(不包含选项的参数都会排到最后)
-# arg 是 getopt 内置的变量 , 里面的值，就是处理过之后的 $@(命令行传入的参数)
+# display parameters other than options (parameters without options will be last)
+# arg is the built-in variable of getopt. the value in arg is $@ (the parameter passed in from the command line) after processing
 for arg do
    warn "$arg";
 done
+
+##########################################################################
 
 # show usage
 usage=$"`basename $0` [-h|--help] [--setup] [--start] [--stop] [--down] [--list]
@@ -177,7 +170,6 @@ usage=$"`basename $0` [-h|--help] [--setup] [--start] [--stop] [--down] [--list]
 "
 
 
-##########################################################################
 # execute docker-compose command
 fun_execute_compose_command() {
     command=$1
@@ -230,4 +222,4 @@ fi
 
 success "complete."
 
-exit $?
+# exit $?
