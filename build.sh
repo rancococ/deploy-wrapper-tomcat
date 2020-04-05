@@ -137,7 +137,7 @@ fun_build() {
     \rm -rf "${build_home}"
     mkdir -p "${build_home}/${product_name}"
 
-    info "copy files to tmpdir"
+    info "copy files"
     \cp -rf "${base_dir}/source"/. "${build_home}/${product_name}"
 
     info "pull images"
