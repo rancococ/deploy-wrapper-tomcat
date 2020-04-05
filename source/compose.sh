@@ -64,8 +64,7 @@ if [ -r "${base_dir}/.env" ]; then
 fi
 self_name=`basename $0 .sh`
 parent_name=`basename "${base_dir}"`
-compose_bin=/usr/local/bin/docker-compose
-compose_yml=${base_dir}/${self_name}.yml
+project_conf=${base_dir}/${self_name}.yml
 project_dir=${base_dir}
 if [ -z "${PRODUCT_NAME}" ]; then
     project_name=${parent_name}
@@ -172,10 +171,10 @@ usage=$"`basename $0` [-h|--help] [--setup] [--start] [--stop] [--down] [--list]
 # execute docker-compose command
 fun_execute_compose_command() {
     command=$1
-    header "execute command:[docker-compose --file ${compose_yml} --project-name ${project_name} --project-directory ${project_dir} ${command}]"
-    info "execute command [docker-compose --file ${compose_yml} --project-name ${project_name} --project-directory ${project_dir} ${command}] start."
-    ${compose_bin} --file ${compose_yml} --project-name ${project_name} --project-directory ${project_dir} ${command}
-    success "execute command [docker-compose --file ${compose_yml} --project-name ${project_name} --project-directory ${project_dir} ${command}] end."
+    header "execute command:[docker-compose --file ${project_conf} --project-name ${project_name} --project-directory ${project_dir} ${command}]"
+    info "execute command [docker-compose --file ${project_conf} --project-name ${project_name} --project-directory ${project_dir} ${command}] start."
+    docker-compose --file ${project_conf} --project-name ${project_name} --project-directory ${project_dir} ${command}
+    success "execute command [docker-compose --file ${project_conf} --project-name ${project_name} --project-directory ${project_dir} ${command}] end."
     return 0
 }
 
