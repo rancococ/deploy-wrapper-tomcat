@@ -162,7 +162,7 @@ fun_build() {
 
     \rm -rf "${build_home}"
 
-    success "successfully builded registry."
+    success "successfully builded ${product_name}."
 
     return 0
 }
