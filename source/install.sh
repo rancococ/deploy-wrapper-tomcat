@@ -55,7 +55,7 @@ base_dir="$( cd -P "$( dirname "$source" )" && pwd )"
 cd "${base_dir}"
 
 # envirionment
-product_name="tomcat"
+product_name="wrapper-tomcat"
 
 # args flag
 arg_help=

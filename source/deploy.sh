@@ -4,7 +4,7 @@
 # deploy.sh
 # --load   : load images
 # --init   : init dir
-# --deploy : deploy data.war
+# --deploy : deploy data
 ##########################################################################
 
 # set -x
@@ -186,10 +186,10 @@ fun_load_images() {
     return 0
 }
 
-# deploy war
-fun_deploy_war() {
-    header "deploy war : "
-    info "deploy war : ${arg_deploy_package}"
+# deploy data
+fun_deploy_data() {
+    header "deploy data : "
+    info "deploy data : ${arg_deploy_package}"
     suffix="${arg_deploy_package##*.}"
     if [ "x${suffix}" == "xwar" ]; then
         \rm -rf "${base_dir}/volume/tomcat/data/"
@@ -231,13 +231,13 @@ if [ "x${arg_load}" == "xtrue" ]; then
     fun_load_images;
 fi
 
-# deploy war
+# deploy data
 if [ "x${arg_deploy}" == "xtrue" ]; then
     if [ ! -f ${arg_deploy_package} ]; then
         usage "$usage";
         exit 1
     fi
-    fun_deploy_war;
+    fun_deploy_data;
 fi
 
 echo ""
