@@ -7,15 +7,13 @@
 # require : docker and docker-compose
 ##########################################################################
 
+# set -x
 set -e
 
 # set author info
 date1=`date "+%Y-%m-%d %H:%M:%S"`
 date2=`date "+%Y%m%d%H%M%S"`
 author="yong.ran@cdjdgm.com"
-
-# envirionment
-product_name="tomcat"
 
 set -o noglob
 
@@ -55,6 +53,9 @@ while [ -h "$source" ]; do
 done
 base_dir="$( cd -P "$( dirname "$source" )" && pwd )"
 cd "${base_dir}"
+
+# envirionment
+product_name="tomcat"
 
 # args flag
 arg_help=

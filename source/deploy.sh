@@ -7,15 +7,13 @@
 # --deploy : deploy data.war
 ##########################################################################
 
+# set -x
 set -e
 
 # set author info
 date1=`date "+%Y-%m-%d %H:%M:%S"`
 date2=`date "+%Y%m%d%H%M%S"`
 author="yong.ran@cdjdgm.com"
-
-# envirionment
-
 
 set -o noglob
 
@@ -55,6 +53,8 @@ while [ -h "$source" ]; do
 done
 base_dir="$( cd -P "$( dirname "$source" )" && pwd )"
 cd "${base_dir}"
+
+# envirionment
 
 # args flag
 arg_help=
@@ -119,7 +119,7 @@ do
             break
             ;;
         *)
-            error "Internal error!"
+            error "internal error!"
             exit 1
             ;;
     esac
@@ -143,7 +143,6 @@ usage=$"`basename $0` [-h|--help] [--init] [--load=xxx.tgz] [--deploy=xxx.war]
        [--deploy=xxx.war]
                        deploy war to datadir.
 "
-
 
 # init volume
 fun_init_volume() {

@@ -7,19 +7,13 @@
 # require : docker and docker-compose
 ##########################################################################
 
+# set -x
 set -e
 
 # set author info
 date1=`date "+%Y-%m-%d %H:%M:%S"`
 date2=`date "+%Y%m%d%H%M%S"`
 author="yong.ran@cdjdgm.com"
-
-# envirionment
-product_name="tomcat"
-product_version="3.5.41.8"
-images=(
-registry.cdjdgm.com/wrapper/wrapper-tomcat:3.5.41.8-centos
-)
 
 set -o noglob
 
@@ -60,7 +54,12 @@ done
 base_dir="$( cd -P "$( dirname "$source" )" && pwd )"
 cd "${base_dir}"
 
-# temp dir
+# envirionment
+product_name="tomcat"
+product_version="3.5.41.8"
+images=(
+registry.cdjdgm.com/wrapper/wrapper-tomcat:3.5.41.8-centos
+)
 temp_uuid="$(cat /proc/sys/kernel/random/uuid)"
 build_home="/tmp/build_${temp_uuid}"
 

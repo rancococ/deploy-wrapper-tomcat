@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 ##########################################################################
-# compose-helper.sh
-# --setup   : 注册容器
-# --start   : 启动容器
-# --stop    : 停止容器
-# --down    : 卸载容器
-# --list    : 查看容器
+# compose.sh
+# --setup   : setup container
+# --start   : start container
+# --stop    : stop container
+# --down    : down container
+# --list    : list container
 ##########################################################################
 
 # set -x
@@ -146,7 +146,7 @@ do
             break
             ;;
         *)
-            error "Internal error!"
+            error "internal error!"
             exit 1
             ;;
     esac
@@ -168,7 +168,6 @@ usage=$"`basename $0` [-h|--help] [--setup] [--start] [--stop] [--down] [--list]
        [--down]             : docker-compose xxx down.
        [--list]             : docker-compose xxx list.
 "
-
 
 # execute docker-compose command
 fun_execute_compose_command() {
