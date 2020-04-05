@@ -55,7 +55,7 @@ base_dir="$( cd -P "$( dirname "$source" )" && pwd )"
 cd "${base_dir}"
 
 # envirionment
-product_name="tomcat"
+product_name="wrapper-tomcat"
 product_version="3.5.41.8"
 images=(
 registry.cdjdgm.com/wrapper/wrapper-tomcat:3.5.41.8-centos
