@@ -55,7 +55,6 @@ base_dir="$( cd -P "$( dirname "$source" )" && pwd )"
 cd "${base_dir}"
 
 # envirionment
-product_name="wrapper-tomcat"
 
 # args flag
 arg_help=
@@ -127,34 +126,34 @@ usage=$"`basename $0` [-h|--help] [--install] [--uninstall]
        [-h|--help]
                   show help info.
        [--install]
-                  install ${product_name}.
+                  install application.
        [--uninstall]
-                  uninstall ${product_name}.
+                  uninstall application.
 "
 
 # install
 fun_install() {
-    header "install ${product_name} : "
+    header "install application : "
 
-    info "deploy ${product_name}";
+    info "deploy application";
     "${base_dir}"/deploy.sh --init
     "${base_dir}"/deploy.sh --load="${base_dir}"/images.tgz
     #"${base_dir}"/deploy.sh --deploy="${base_dir}"/data.war
 
-    info "setup ${product_name}";
+    info "setup application";
     "${base_dir}"/compose.sh --setup
 
     echo ""
-    success "successfully installed ${product_name}."
+    success "successfully installed application."
 
     return 0
 }
 
 # uninstall
 fun_uninstall() {
-    header "uninstall ${product_name} : "
+    header "uninstall application : "
 
-    info "down ${product_name}"
+    info "down application"
     "${base_dir}"/compose.sh --down
 
     #info "remove images"
@@ -164,7 +163,7 @@ fun_uninstall() {
     #fi
 
     echo ""
-    success "successfully uninstalled ${product_name}."
+    success "successfully uninstalled application."
 
     return 0
 }

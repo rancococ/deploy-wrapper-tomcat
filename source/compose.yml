@@ -7,7 +7,7 @@ version: "2"
 services:
   # tomcat
   tomcat:
-    image: ${IMAGE_REPO}/${IMAGE_TOMCAT}
+    image: "${IMAGE_TOMCAT}"
     container_name: "tomcat-web.${PRODUCT_NAME}.${COMPANY_NAME}"
     hostname: "tomcat-web.${PRODUCT_NAME}.${COMPANY_NAME}"
     restart: "always"
