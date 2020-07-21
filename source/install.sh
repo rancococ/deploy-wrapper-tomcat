@@ -55,6 +55,11 @@ base_dir="$( cd -P "$( dirname "$source" )" && pwd )"
 cd "${base_dir}"
 
 # envirionment
+if [ -r "${base_dir}/.env" ]; then
+    while read line; do
+        eval "$line";
+    done < "${base_dir}/.env"
+fi
 
 # args flag
 arg_help=
@@ -135,13 +140,13 @@ usage=$"`basename $0` [-h|--help] [--install] [--uninstall]
 fun_install() {
     header "install application : "
 
-    info "deploy application";
+    info "deploy application"
     "${base_dir}"/deploy.sh --init
     "${base_dir}"/deploy.sh --load="${base_dir}"/images.tgz
     #"${base_dir}"/deploy.sh --deploy="${base_dir}"/data.war
 
-    info "setup application";
-    "${base_dir}"/compose.sh --setup
+    #info "setup application"
+    #"${base_dir}"/compose.sh --setup
 
     echo ""
     success "successfully installed application."

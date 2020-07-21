@@ -8,8 +8,8 @@ services:
   # tomcat
   tomcat:
     image: "${IMAGE_TOMCAT}"
-    container_name: "tomcat-web.${PRODUCT_NAME}.${COMPANY_NAME}"
-    hostname: "tomcat-web.${PRODUCT_NAME}.${COMPANY_NAME}"
+    container_name: "tomcat.${PRODUCT_NAME}.${COMPANY_NAME}"
+    hostname: "tomcat.${PRODUCT_NAME}.${COMPANY_NAME}"
     restart: "always"
     env_file:
       - ./tomcat.env
@@ -22,7 +22,7 @@ services:
       - ./volume/tomcat/temp:/data/app/temp:rw
     network_mode: "host"
     extra_hosts:
-      - "tomcat-web.${PRODUCT_NAME}.${COMPANY_NAME}:${HOST_IP}"
+      - "tomcat.${PRODUCT_NAME}.${COMPANY_NAME}:${HOST_IP}"
     # cap_add:
     #   - NET_ADMIN
     #   - SYS_ADMIN
