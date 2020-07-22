@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Server port="${shutdown.port}" shutdown="SHUTDOWN">
+  <Listener className="org.apache.catalina.startup.VersionLoggerListener" logArgs="true" logEnv="true" logProps="true" />
+  <!--<Listener className="org.apache.catalina.security.SecurityListener" />-->
+  <!--<Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" useAprConnector="true" useOpenSSL="true" />-->
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+  <!--<Listener className="org.apache.catalina.mbeans.JmxRemoteLifecycleListener" rmiRegistryPortPlatform="${rmi.registry.port.platform}" rmiServerPortPlatform="${rmi.server.port.platform}" />-->
+  <GlobalNamingResources>
+    <Resource name="UserDatabase" auth="Container" type="org.apache.catalina.UserDatabase" description="User database that can be updated and saved" factory="org.apache.catalina.users.MemoryUserDatabaseFactory" pathname="conf/tomcat-users.xml" />
+  </GlobalNamingResources>
+  <Service name="Catalina">
+    <!--Http11AprProtocol-->
+    <!--<Executor name="tomcatThreadPoolApr" maxIdleTime="600000" minSpareThreads="50" maxThreads="500" namePrefix="catalina-exec-apr-"/>-->
+    <!--Apr:ipv4-->
+    <!--<Connector port="${http.listen.port}" address="0.0.0.0" useBodyEncodingForURI="true" URIEncoding="UTF-8" acceptCount="1000" enableLookups="false" redirectPort="8443" connectionTimeout="20000" protocol="org.apache.coyote.http11.Http11AprProtocol" executor="tomcatThreadPoolApr"/>-->
+    <!--Apr:ipv6-->
+    <!--<Connector port="${http.listen.port}" address="[::]" useBodyEncodingForURI="true" URIEncoding="UTF-8" acceptCount="1000" enableLookups="false" redirectPort="8443" connectionTimeout="20000" protocol="org.apache.coyote.http11.Http11AprProtocol" executor="tomcatThreadPoolApr"/>-->
+    <!--Http11NioProtocol-->
+    <Executor name="tomcatThreadPoolNio" maxIdleTime="600000" minSpareThreads="50" maxThreads="500" namePrefix="catalina-exec-nio-"/>
+    <!--Nio:ipv4-->
+    <Connector port="${http.listen.port}" address="0.0.0.0" useBodyEncodingForURI="true" URIEncoding="UTF-8" acceptCount="1000" enableLookups="false" redirectPort="8443" connectionTimeout="20000" protocol="org.apache.coyote.http11.Http11NioProtocol" executor="tomcatThreadPoolNio"/>
+    <!--Nio:ipv6-->
+    <!--<Connector port="${http.listen.port}" address="[::]" useBodyEncodingForURI="true" URIEncoding="UTF-8" acceptCount="1000" enableLookups="false" redirectPort="8443" connectionTimeout="20000" protocol="org.apache.coyote.http11.Http11NioProtocol" executor="tomcatThreadPoolNio"/>-->
+    <Engine name="Catalina" defaultHost="localhost">
+      <Realm className="org.apache.catalina.realm.LockOutRealm">
+        <Realm className="org.apache.catalina.realm.UserDatabaseRealm" resourceName="UserDatabase"/>
+      </Realm>
+      <Host name="localhost" deployOnStartup="false" deployXML="true" autoDeploy="true" unpackWARs="false" appBase="webapps">
+        <Valve className="org.apache.catalina.authenticator.SingleSignOn"/>
+        <Valve className="org.apache.catalina.valves.AccessLogValveWithParameter" conditionWithParameter="healthcheck" pattern="%{X-Forwarded-For}i %h %l %u %t %r %s %b %D %q %{User-Agent}i" suffix=".log" prefix="localhost_access" directory="logs" maxDays="30"/>
+        <Context sessionCookieName="${session.cookie.name}" sessionCookiePath="${session.cookie.path}" distributable="true" reloadable="false" swallowOutput="true" docBase="ROOT" path="">
+            <Valve className="org.apache.catalina.valves.RemoteAddrValve" allow=".*" />
+        </Context>
+      </Host>
+    </Engine>
+  </Service>
+</Server>

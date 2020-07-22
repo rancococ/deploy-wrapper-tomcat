@@ -15,6 +15,9 @@ services:
       - ./tomcat.env
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ./volume/tomcat/conf/server.xml:/data/app/conf/server.xml:ro
+      - ./volume/tomcat/conf/web.xml:/data/app/conf/web.xml:ro
+      - ./volume/tomcat/conf/wrapper-additional.conf:/data/app/conf/wrapper-additional.conf:ro
       - ./volume/tomcat/fonts:/usr/share/fonts/chinese:rw
       - ./volume/tomcat/libextend:/data/app/libextend:ro
       - ./volume/tomcat/data:/data/app/webapps/ROOT:ro
