@@ -56,9 +56,9 @@ cd "${base_dir}"
 
 # envirionment
 product_name="wrapper-tomcat"
-product_version="3.5.41.8"
+product_version="3.5.43.2"
 images=(
-registry.cdjdgm.com/wrapper/wrapper-tomcat:3.5.41.8-centos
+registry.cdjdgm.com/wrapper/wrapper-tomcat:3.5.43.2-centos
 )
 temp_uuid="$(cat /proc/sys/kernel/random/uuid)"
 build_home="/tmp/build_${temp_uuid}"
@@ -157,9 +157,7 @@ fun_build() {
 
     chmod 744 "${build_home}/${product_name}"/*.sh
 
-    #tar -C "${build_home}" -czf "${base_dir}"/${product_name}-${product_version}.tgz "${product_name}"
-    cd "${build_home}/${product_name}"
-    tar -czf "${base_dir}"/${product_name}-${product_version}.tgz .[!.]* *
+    tar -C "${build_home}" -czf "${base_dir}"/${product_name}-${product_version}.tgz "${product_name}"
 
     \rm -rf "${build_home}"
 
